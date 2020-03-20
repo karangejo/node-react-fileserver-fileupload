@@ -148,3 +148,26 @@ app.delete('/file', async (req, res) => {
     console.log(err);
   }
 });
+
+app.get('/files', async (req, res) => {
+  console.log("getting all files");
+  try{
+    const filesInfo = await FileMongo.find();
+      res.status(200).json(filesInfo);
+  } catch (err) {
+    res.status(400).json({ message: err.message})
+  }
+})
+
+app.get('/download', (req, res) => {
+  console.log(req.query);
+  const dirname = './uploads/'
+  const file = dirname + req.query.fileName;
+  console.log(file);
+  try{
+    res.download(file); // Set disposition and send it.
+  } catch (err) {
+    console.log(err);
+    res.json({ message: err.message})
+  }
+});
